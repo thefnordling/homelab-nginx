@@ -6,7 +6,7 @@ secrets:
 
 services:
   nginx:
-    image: docker.io/thefnordling/homelab-nginx:1.0.5
+    image: docker.io/thefnordling/homelab-nginx:1.0.15
     environment:
       - VAULT_ADDR=http://swarm1.home.arpa:8200
       - ROLE_ID=74548022-db81-5c30-681c-3b5f441c9af4
