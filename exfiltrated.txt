@@ -4,3 +4,4 @@ and some more
 and some more
 from wsl
 from git bash
+from git bash with https override
