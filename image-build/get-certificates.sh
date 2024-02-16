@@ -25,7 +25,9 @@ do
         -d '{ "common_name": "*.home.arpa", "ttl":"2678400" }' \
         ${VAULT_ADDR}/v1/pki_int/issue/home-dot-arpa | tee \
         >(jq -r .data.certificate > /etc/nginx/tls/wildcard.crt) \
-        >(jq -r .data.private_key > /etc/nginx/tls/wildcard.key) 1>/dev/null
+        >(jq -r .data.private_key > /etc/nginx/tls/wildcard.key) \
+        >(jq -r .data.ca_chain[] > /etc/nginx/tls/chain.pem) 1>/dev/null \
+        && cat /etc/nginx/tls/wildcard.crt /etc/nginx/tls/chain.pem > /etc/nginx/tls/wildcard-with-chain.pem
     if [ -e /var/run/nginx.pid ]; then
         echo "reloading nginx"
         nginx -s reload

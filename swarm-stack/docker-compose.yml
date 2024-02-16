@@ -1,14 +1,20 @@
 version: '3.9'
 
+networks:
+  nginx-net:
+    external: true
+
 secrets:
   certificate-issuance-secret-id:
     external: true
 
 services:
   nginx:
-    image: docker.io/thefnordling/homelab-nginx:1.0.15
+    image: docker.io/thefnordling/homelab-nginx:1.0.17
+      #    entrypoint: /bin/sh
+      #   command: -c "sleep 3h"
     environment:
-      - VAULT_ADDR=http://swarm1.home.arpa:8200
+      - VAULT_ADDR=http://vault.home.arpa:8200
       - ROLE_ID=74548022-db81-5c30-681c-3b5f441c9af4
       - SECRET_ID_FILE=/run/secrets/secret-id
     secrets:
@@ -18,4 +24,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - default.conf:/etc/nginx/conf.d/default.conf
+      - /home/fnord/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+        nginx-net:
+    deploy:
+      placement:
+        constraints: [node.hostname == proxy]
